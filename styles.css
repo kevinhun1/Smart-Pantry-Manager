@@ -1,0 +1,251 @@
+/* Base styles */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  background: #f6fbf7;
+  color: #23402a;
+}
+
+.accent-green {
+  color: #43a047;
+}
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  background: #2e7d32;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+  z-index: 100;
+  margin-top: 0;
+  border-radius: 0;
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 2rem;
+}
+
+.logo {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #e8f5e9;
+  text-decoration: none;
+  margin-left: 1.5rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #b2dfdb;
+}
+
+.nav-links .button,
+.button {
+  background: linear-gradient(90deg, #43a047 60%, #81c784 100%);
+  color: #fff !important;
+  border: none;
+  border-radius: 24px;
+  padding: 0.5rem 1.3rem;
+  margin-left: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.nav-links .button:hover,
+.button:hover {
+  background: linear-gradient(90deg, #388e3c 60%, #66bb6a 100%);
+  box-shadow: 0 4px 16px rgba(67, 160, 71, 0.15);
+  color: #fff !important;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(120deg, #e8f5e9 60%, #c8e6c9 100%);
+  padding: 4rem 0 3rem 0;
+  text-align: center;
+  margin-top: 2rem;
+  box-shadow: 0 2px 12px rgba(67, 160, 71, 0.07);
+  border-radius: 0;
+}
+
+.hero h1 {
+  font-size: 2.7rem;
+  font-weight: 700;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  color: #388e3c;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  font-size: 1.1rem;
+  padding: 0.7rem 2.2rem;
+}
+
+/* Features Section */
+.features-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.feature-card {
+  flex: 1;
+  min-width: 220px;
+  background: #f1f8e9;
+  border-radius: 0;
+  padding: 2rem 1.2rem;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.06);
+  text-align: center;
+  transition: box-shadow 0.2s;
+}
+
+.feature-card:hover {
+  box-shadow: 0 6px 24px rgba(67, 160, 71, 0.13);
+}
+
+.feature-icon {
+  font-size: 2.2rem;
+  color: #388e3c;
+  margin-bottom: 0.7rem;
+}
+
+/* Section Styles */
+.section {
+  padding: 3rem 0;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(67, 160, 71, 0.07);
+  border-radius: 0;
+  margin: 2rem 0;
+}
+
+.section:nth-child(even) {
+  background: #f1f8e9;
+}
+
+.section h2 {
+  color: #388e3c;
+  font-size: 2rem;
+  margin-bottom: 0.7rem;
+}
+
+.section p {
+  color: #23402a;
+  font-size: 1.1rem;
+}
+
+/* Team Section */
+.team-flex {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.team-member {
+  flex: 1;
+  min-width: 180px;
+  max-width: 220px;
+  background: #e8f5e9;
+  border-radius: 0;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.06);
+}
+
+.team-member img {
+  width: 80px;
+  border-radius: 50%;
+  border: 3px solid #81c784;
+  margin-bottom: 0.7rem;
+}
+
+.team-member h4 {
+  margin: 0.5rem 0 0 0;
+  color: #2e7d32;
+}
+
+.team-member p {
+  margin: 0;
+  color: #388e3c;
+  font-size: 1rem;
+}
+
+/* Footer */
+.footer {
+  background: #2e7d32;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem 0;
+  margin-top: 2rem;
+  border-radius: 0;
+  box-shadow: 0 -2px 12px rgba(67, 160, 71, 0.07);
+}
+
+/* Container Utility */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  /* Add a little vertical spacing between containers */
+  box-sizing: border-box;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .features-flex,
+  .team-flex {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar .container,
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.7rem 1rem;
+  }
+  .nav-links {
+    margin-top: 0.7rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .hero h1 {
+    font-size: 2rem;
+  }
+  .section h2 {
+    font-size: 1.3rem;
+  }
+}
