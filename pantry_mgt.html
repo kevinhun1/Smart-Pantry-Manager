@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantry Management</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="login-logo">
+    <a href="index.html" class="logo"><i class="fas fa-leaf"></i> SmartPantry</a>
+  </div>
+  <div class="pantry-header">
+    <a href="recipes.html" class="button pantry-recipes-link">Go to Recipes</a>
+  </div>
+
+  <div class="pantry-container">
+    <h2>Manage Your Pantry</h2>
+    <form id="pantry-form" autocomplete="off">
+      <div class="pantry-form-fields">
+        <input type="text" id="item-name" placeholder="Item Name" required>
+        <input type="date" id="mfg-date" required>
+        <input type="date" id="exp-date" required>
+        <button type="submit" class="button">Add Item</button>
+      </div>
+    </form>
+    <!-- Placeholder for pantry items list (to be filled by backend or JS in the future) -->
+    <div class="pantry-list-section">
+      <h3>Your Pantry Items</h3>
+      <div id="pantry-list">
+        <p style="color:#888;">Your added pantry items will appear here.</p>
+      </div>
+      <button class="button" style="margin-top:1rem;" disabled>Create Recipe from Selected</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <span>&copy; 2025 Smart Pantry Manager. All rights reserved.</span>
+    </div>
+  </footer>
+</body>
+</html>

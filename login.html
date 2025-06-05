@@ -84,21 +84,10 @@
 </head>
 <body>
 
- 
-  <nav class="navbar">
-    <div class="container">
-      <a href="index.html" class="logo"><i class="fas fa-leaf"></i> SmartPantry</a>
-      <div class="nav-links">
-        <a href="index.html#about">About</a>
-        <a href="index.html#team">Team</a>
-        <a href="index.html#features">Features</a>
-        <a href="login.html" class="button login-link">Login</a>
-        <a href="register.html" class="button register-link">Register</a>
-      </div>
-    </div>
-  </nav>
+  <div class="login-logo">
+    <a href="index.html" class="logo"><i class="fas fa-leaf"></i> SmartPantry</a>
+  </div>
 
-  
   <div class="login-container">
     <h2>Login to Your Pantry</h2>
     <form action="/login" method="POST">
@@ -113,11 +102,11 @@
       <button type="submit" class="login-button">Login</button>
     </form>
     <div class="login-footer">
-      Don't have an account? <a href="register.html">Register here</a>
+      Don't have an account?
+      <a href="register.html" class="button register-link">Register</a>
     </div>
   </div>
 
-  
   <footer class="footer">
     <div class="container">
       <span>&copy; 2025 Smart Pantry Manager. All rights reserved.</span>
