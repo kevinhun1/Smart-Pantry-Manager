@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pantry App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0fff0;
+      color: #333;
+    }
+
+    /* Landing Page */
+    #landing {
+      height: 100vh;
+      background: url('https://i.pinimg.com/736x/d8/c8/19/d8c8195f1f852b3678a8bba9cbc6bc27.jpg') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    #landing h1 {
+      font-size: 3em;
+      color: #fff;
+      text-shadow: 1px 1px 5px #000;
+    }
+
+    #landing button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #landing button:hover {
+      background-color: #45a049;
+    }
+
+    /* Recipes Page */
+    #recipes {
+      display: none;
+      padding: 30px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .filters {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .filters button {
+      margin: 5px;
+      padding: 10px 16px;
+      background-color: #a5d6a7;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .filters button:hover {
+      background-color: #81c784;
+    }
+
+    #searchBar {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 30px;
+      border: 2px solid #c8e6c9;
+      border-radius: 8px;
+    }
+
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .recipe-card {
+      background-color: #ffffff;
+      border: 2px solid #c8e6c9;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .recipe-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .recipe-content {
+      padding: 15px;
+    }
+
+    .recipe-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .recipe-details {
+      display: none;
+      font-size: 0.9em;
+      margin-top: 10px;
+      color: #444;
+    }
+
+    #notFound {
+      text-align: center;
+      margin-top: 40px;
+      display: none;
+      position: relative;
+    }
+
+    #notFound::before {
+      content: "";
+      background: url('https://i.pinimg.com/736x/16/4f/ac/164facb86a01c02673e014e03fb9bfc6.jpg') center center no-repeat;
+      background-size: contain;
+      opacity: 0.08;
+      position: absolute;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      z-index: 0;
+    }
+
+    #notFound .message {
+      position: relative;
+      z-index: 1;
+    }
+
+    #notFound img {
+      width: 200px;
+      margin-top: 10px;
+      z-index: 1;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Landing Page -->
+<section id="landing">
+  <h1>Welcome to My Pantry</h1>
+  <button onclick="showRecipes()">Start Cooking</button>
+</section>
+
+<!-- Recipe Section -->
+<section id="recipes">
+  <input type="text" id="searchBar" oninput="filterRecipes()" placeholder="Search for a recipe...">
+
+  <div class="filters">
+    <button onclick="filterCategory('all')">All</button>
+    <button onclick="filterCategory('breakfast')">Breakfast</button>
+    <button onclick="filterCategory('lunch')">Lunch</button>
+    <button onclick="filterCategory('dinner')">Dinner</button>
+    <button onclick="filterCategory('snacks')">Snacks</button>
+  </div>
+
+  <div class="recipes-grid" id="recipeContainer">
+    
+    
+    <!-- Recipe Cards -->
+     <div class="recipe-card" data-category="dinner">
+    <img src="https://i.pinimg.com/736x/de/b9/07/deb90737a917cfeb017df5632be64463.jpg" alt="Lasagna">
+    <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Lasagna</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>9 lasagna noodles</li>
+          <li>500g ground beef or pork</li>
+          <li>1 small onion, chopped</li>
+          <li>2 cups tomato sauce</li>
+          <li>1 tsp garlic (minced)</li>
+          <li>1 tsp dried oregano or mixed herbs</li>
+          <li>1 cup cottage cheese or ricotta</li>
+          <li>2 cups grated mozzarella</li>
+          <li>Salt and pepper to taste</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>
+        <li>Cook noodles as per package instructions.</li>
+        <li>Sauté onion and garlic in a pan. Add ground meat, cook until browned. Stir in tomato sauce and herbs.</li>
+        <li>Layer in a baking dish: meat sauce, noodles, cheese. Repeat and top with mozzarella.</li>
+        <li>Bake at 180°C (350°F) for 30–35 minutes.</li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    
+   <div class="recipe-card" data-category="breakfast">
+  <img src="https://i.pinimg.com/736x/14/a7/eb/14a7eb0408b6a262120fa84cbe0e0b62.jpg" alt="Avocado Toast">
+  <div class="recipe-content">
+    <div class="recipe-title" onclick="toggleDetails(this)">Avocado Toast</div>
+    <div class="recipe-details">
+      <strong>Ingredients:</strong>
+      <ul>
+        <li>2 slices of bread</li>
+        <li>1 ripe avocado</li>
+        <li>Salt & pepper</li>
+        <li>1 tsp lemon juice</li>
+        <li>Optional: 1 egg</li>
+      </ul>
+      <strong>Method:</strong>
+      <ul>
+      <li>Toast the bread slices.</li> 
+      <li>In a bowl, mash the avocado with salt, pepper, and lemon juice.</li>
+      <li>Spread on toast and top with a cooked egg if desired.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+    <div class="recipe-card"data-category="lunch">
+      <img src="https://i.pinimg.com/736x/4e/f3/68/4ef368d2700e61f7ae8315d57f38803c.jpg" alt="Cauliflower Fried Rice">
+      <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Cauliflower Fried Rice</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>1 small head of cauliflower, grated</li>
+          <li>3 tbsp reduced-sodium soy sauce</li>
+          <li>2 tbsp mirin</li>
+          <li>1 tsp granulated sugar</li>
+          <li>¼ cup neutral oil</li>
+          <li>2 shallots, thinly sliced</li>
+          <li>2 large eggs, beaten</li>
+          <li>1 carrot, julienned</li>
+          <li>3 cloves garlic, finely chopped</li>
+          <li>½ cup frozen peas</li>
+          <li>Salt and pepper to taste</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>      
+      <li>Heat oil in a large skillet over medium heat.</li>
+      <li>Sauté shallots, garlic, and carrot until tender.</li>
+      <li>Add grated cauliflower and cook for 5 minutes.</li>
+      <li>Push mixture to the side, scramble eggs in the pan, then mix with vegetables.</li>
+      <li>Stir in peas, soy sauce, mirin, and sugar. Cook until heated through.</li>
+</ul>
+      </div>
+    </div>
+  </div>
+
+
+<div class="recipe-card" data-category="breakfast">
+  <img src="https://i.pinimg.com/736x/38/f2/fa/38f2fa060e301ca5b9b172888fc22b4c.jpg" alt="Cinnamonon Roll Pancakes">
+  <div class="recipe-content">
+    <div class="recipe-title" onclick="toggleDetails(this)">Cinnamon Roll Pancakes</div>
+    <div class="recipe-details">
+      <strong>Ingredients:</strong>
+      <ul>
+      <li>1¾ cups all-purpose flour</li>
+      <li>1 tbsp baking powder</li>
+      <li>1 tsp kosher salt</li>
+      <li>2 cups buttermilk</li>
+      <li>2 eggs</li>
+      <li>1 tsp vanilla extract</li>
+      <li>2 tbsp vegetable oil</li>
+      <li><strong>Cinnamon Filling:</strong> 4 tbsp melted butter, ⅓ cup brown sugar, 1½ tsp cinnamon</li>
+      <li><strong>Glaze:</strong> 4 tbsp butter, 2 oz cream cheese, ¾ cup powdered sugar, ½ tsp vanilla</li>
+      </ul>
+      <strong>Method:</strong>
+      <li>In a bowl, mix flour, baking powder, and salt. In another bowl, whisk buttermilk, eggs, vanilla, and oil. Combine wet and dry ingredients.</li>
+      <li>Prepare the cinnamon filling by mixing melted butter, brown sugar, and cinnamon. Place in a piping bag.</li>
+      <li>For the glaze, beat butter and cream cheese until smooth. Add powdered sugar and vanilla; mix until creamy.</li>
+      <li>Heat a skillet over medium heat and grease it. Pour ¼ cup batter for each pancake. Once bubbles form, pipe a spiral of cinnamon filling on top. Flip and cook until golden.</li>
+      <li>Serve pancakes drizzled with cream cheese glaze.</li>
+    </div>
+  </div>
+</div>
+
+
+<div class="recipe-card" data-category="breakfast">
+  <img src="https://i.pinimg.com/736x/d9/34/0a/d9340a988439c3a94b5044c0c65a4d34.jpg" alt="Crepes">
+  <div class="recipe-content">
+    <div class="recipe-title" onclick="toggleDetails(this)">Crepes</div>
+    <div class="recipe-details">
+      <strong>Ingredients:</strong>
+      <ul>
+      <li>1½ cups whole or 2% milk</li>
+      <li>2 large eggs</li>
+      <li>1 cup all-purpose flour</li>
+      <li>Pinch of salt</li>
+      <li>1 tbsp granulated sugar</li>
+      <li>3 tablespoons unsalted butter, melted</li>
+      </ul>
+      <strong>Method:</strong>
+      <li>In a blender, combine milk, eggs, flour, salt, sugar, and melted butter. Blend until smooth.</li>
+      <li>Let the batter rest for 30 minutes.</li>
+      <li>Heat a non-stick skillet over medium heat and lightly grease it.</li>
+      <li>Pour ¼ cup of batter into the skillet, swirling to coat the bottom.</li>
+      <li>Cook for 1-2 minutes until the edges lift, then flip and cook for another minute.</li>
+       <li>Repeat with remaining batter. Serve with desired fillings.</li>
+    </div>
+  </div>
+</div>
+
+
+<div class="recipe-card" data-category="snacks">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQks7cdTpdGjYgOhfhzmEDnfGdcqea1y4ifgw&s" alt="Frozen Yoghurt Bites">
+    <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Frozen Yoghurt Bites</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>1 cup plain or flavored yogurt</li>
+          <li>½ cup chopped fruits (e.g., strawberries, bananas, mango)</li>
+          <li>Honey (optional, for sweetness)</li>
+          <li>Mini muffin tray or ice cube tray</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>
+        <li>Mix yogurt with fruits and a little honey if needed.</li>
+        <li>Spoon mixture into tray compartments.</li>
+        <li>Freeze for 2–3 hours until firm.</li>
+        <li>Pop out and enjoy frozen!</li>
+       </ul>
+      </div>
+    </div>
+  </div>
+
+     <div class="recipe-card" data-category="lunch">
+    <img src="https://i.pinimg.com/736x/be/19/43/be1943bf05e4e902bf0e8d11072b2720.jpg" alt="Chicken Wraps">
+    <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Chicken Wrap</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>1 tortilla wrap</li>
+          <li>1 cooked chicken breast (grilled or shredded)</li>
+          <li>1/2 cup lettuce (shredded)</li>
+          <li>1 tomato (sliced)</li>
+          <li>2 tbsp mayonnaise or sauce of choice</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>      
+      <li>Mix dry and wet pancake ingredients separately, then combine.</li>
+      <li>Mix cinnamon filling and glaze ingredients.</li>
+      <li>Cook pancakes and swirl in cinnamon filling before flipping.</li>
+      <li>Top with cream cheese glaze before serving.</li>
+</ul>
+      </div>
+    </div>
+  </div>
+
+
+<div class="recipe-card" data-category="dinner">
+    <img src="https://i.pinimg.com/736x/13/43/e9/1343e9d10820df8e73d1588ecec26e80.jpg" alt="Ground Pork Stir-Fry">
+    <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Ground Pork Stir-Fry</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>500g ground pork</li>
+          <li>1 small onion, chopped</li>
+          <li>1 bell pepper, sliced</li>
+          <li>2 tbsp soy sauce</li>
+          <li>1 tbsp oil (for frying)</li>
+          <li>1 tsp garlic, minced</li>
+          <li>1 tsp ginger, grated (optional)</li>
+          <li>Salt and pepper to taste</li>
+          <li>Cooked rice for serving</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>
+        <li>Heat oil in a pan. Add onion and garlic, sauté until soft.</li>
+        <li>Add ground pork, cook until browned.</li>
+        <li>Add bell pepper, soy sauce, and seasoning. Stir fry for 5–7 minutes.</li>
+        <li>Serve over hot rice.</li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="recipe-card" data-category="snacks">
+    <img src="https://i.pinimg.com/736x/a5/b8/8f/a5b88fffec0fa3777666e3a4d24211ce.jpg" alt="Brownies">
+    <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Brownies</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>½ cup (1 stick) butter, melted</li>
+          <li>1 cup sugar</li>
+          <li>2 eggs</li>
+          <li>½ cup flour</li>
+          <li>⅓ cup cocoa powder</li>
+          <li>½ tsp baking powder</li>
+          <li>½ tsp salt</li>
+          <li>1 tsp vanilla extract</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>
+        <li>Preheat oven to 175°C (350°F). Grease an 8x8 inch pan.</li>
+        <li>Mix melted butter and sugar. Add eggs and vanilla.</li>
+        <li>Sift in dry ingredients and mix just until combined.</li>
+        <li>Pour into pan and bake for 20–25 mins.</li>
+       </ul>
+      </div>
+    </div>
+  </div>
+
+
+      <div class="recipe-card" data-category="dinner">
+    <img src="https://i.pinimg.com/736x/e6/72/eb/e672eba8e0838ab0a7073c6007eadef0.jpg" alt="Pasta Alfredo">
+    <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Pasta Alfredo</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>200g pasta (fettuccine or penne)</li>
+          <li>1 cup heavy cream</li>
+          <li>2 tbsp butter</li>
+          <li>2 cloves garlic (minced)</li>
+          <li>1/2 cup grated Parmesan cheese</li>
+          <li>Salt & pepper to taste</li>
+          <li>Parsley (for garnish)</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>
+        <li>Cook pasta according to package instructions.</li>
+        <li>In a pan, melt butter and sauté garlic.</li>
+        <li>Add cream and simmer. Stir in cheese, salt, and pepper until smooth.</li>
+        <li>Mix in the pasta and top with parsley.</li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <div class="recipe-card" data-category="snacks">
+    <img src="https://i.pinimg.com/736x/48/5c/ba/485cba5f1e71510a9f7a21200bfdb9f3.jpg" alt="Fruit Parfait">
+    <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Fruit Parfait</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>1 cup yogurt (plain or flavored)</li>
+          <li>1/2 cup granola</li>
+          <li>1/2 cup mixed fruits (berries, banana, mango, etc.)</li>
+          <li>1 tsp honey (optional)</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>
+        <li>In a glass or bowl, layer yogurt, granola, and fruit.</li>
+        <li>Repeat the layers as desired.</li>
+        <li>Drizzle with honey on top.</li>
+        <li>Chill before serving.</li>
+       </ul>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="recipe-card"data-category="lunch">
+      <img src="https://i.pinimg.com/736x/96/93/30/969330ee98f70d5d7eac52984a1dea7d.jpg" alt="Chicken Salad">
+      <div class="recipe-content">
+      <div class="recipe-title" onclick="toggleDetails(this)">Chicken Salad</div>
+      <div class="recipe-details">
+        <strong>Ingredients:</strong>
+        <ul>
+          <li>2 cups cooked chicken (shredded or chopped)</li>
+          <li>½ cup mayonnaise or plain yogurt</li>
+          <li>¼ cup chopped celery or cucumber</li>
+          <li>¼ cup chopped onion (optional)</li>
+          <li>1 tsp mustard (optional)</li>
+          <li>Salt and pepper to taste</li>
+          <li>Lettuce or bread for serving</li>
+        </ul>
+        <strong>Method:</strong>
+        <ul>      
+      <li>Mix chicken, mayo/yogurt, and veggies in a bowl.</li>
+      <li>Season with salt, pepper, and mustard if using.</li>
+      <li>Serve chilled over lettuce or in a sandwich.</li>
+</ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Recipe Not Found -->
+  <div id="notFound">
+    <div class="message">
+      <h3>Recipe Not Found</h3>
+      <p>Seems I gotta add more</p>
+      <img src="https://i.pinimg.com/736x/6a/94/dc/6a94dcc4e4b3385cdeebaa6c1517575c.jpg" alt="Chef Cooking more food">
+    </div>
+  </div>
+</section>
+
+<script>
+  function showRecipes() {
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('recipes').style.display = 'block';
+  }
+
+  function filterCategory(category) {
+    const cards = document.querySelectorAll('.recipe-card');
+    const notFound = document.getElementById('notFound');
+    let found = false;
+    cards.forEach(card => {
+      if (category === 'all' || card.dataset.category === category) {
+        card.style.display = 'block';
+        found = true;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    notFound.style.display = found ? 'none' : 'block';
+  }
+
+  function filterRecipes() {
+    const query = document.getElementById('searchBar').value.toLowerCase();
+    const cards = document.querySelectorAll('.recipe-card');
+    const notFound = document.getElementById('notFound');
+    let found = false;
+    cards.forEach(card => {
+      const title = card.querySelector('.recipe-title').textContent.toLowerCase();
+      if (title.includes(query)) {
+        card.style.display = 'block';
+        found = true;
+      } else {	
+        card.style.display = 'none';
+      }
+    });
+    notFound.style.display = found ? 'none' : 'block';
+  }
+
+  function toggleDetails(el) {
+    const details = el.nextElementSibling;
+    details.style.display = (details.style.display === 'block') ? 'none' : 'block';
+  }
+</script>
+
+</body>
+</html>
