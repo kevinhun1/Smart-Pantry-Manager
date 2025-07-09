@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pantry Management</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
+
 <body>
   <div class="login-logo">
     <a href="index.html" class="logo"><i class="fas fa-leaf"></i> SmartPantry</a>
@@ -20,10 +22,19 @@
     <h2>Manage Your Pantry</h2>
     <form id="pantry-form" autocomplete="off">
       <div class="pantry-form-fields">
-        <input type="text" id="item-name" placeholder="Item Name" required>
-        <input type="date" id="mfg-date" required>
-        <input type="date" id="exp-date" required>
-        <button type="submit" class="button">Add Item</button>
+        <div style="display:flex; flex-direction:column; gap:0.5rem; width:100%;">
+          <label for="item-name" style="font-weight:500;">Item Name</label>
+          <input type="text" id="item-name" placeholder="Item Name" required>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.5rem; width:100%;">
+          <label for="mfg-date" style="font-weight:500;">Manufacturing Date</label>
+          <input type="date" id="mfg-date" required>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.5rem; width:100%;">
+          <label for="exp-date" style="font-weight:500;">Expiration Date</label>
+          <input type="date" id="exp-date" required>
+        </div>
+        <button type="submit" class="button" style="align-self:flex-end; margin-top:1.5rem;">Add Item</button>
       </div>
     </form>
     <!-- Placeholder for pantry items list (to be filled by backend or JS in the future) -->
@@ -32,7 +43,8 @@
       <div id="pantry-list">
         <p style="color:#888;">Your added pantry items will appear here.</p>
       </div>
-      <button class="button" style="margin-top:1rem;" disabled>Create Recipe from Selected</button>
+      <button class="button" id="create-recipe-btn" style="margin-top:1rem;" disabled>Create Recipe from
+        Selected</button>
     </div>
   </div>
 
@@ -42,4 +54,81 @@
     </div>
   </footer>
 </body>
+
 </html>
+
+<script>
+  async function fetchPantryItems() {
+    const res = await fetch('pantry_items.php');
+    const items = await res.json();
+    const list = document.getElementById('pantry-list');
+    if (!items.length) {
+      list.innerHTML = '<p style="color:#888;">Your added pantry items will appear here.</p>';
+      document.getElementById('create-recipe-btn').disabled = true;
+      return;
+    }
+    list.innerHTML = '<ul style="list-style:none;padding:0;">' +
+      items.map(item =>
+        `<li style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+          <span>
+            <b>${item.item_name}</b>
+            <span style="color:#666;font-size:0.95em;">
+              (MFG: ${item.manufacture_date || '-'}, EXP: ${item.expiration_date || '-'})
+            </span>
+          </span>
+          <button class="remove-btn" data-id="${item.id}" style="background:#e57373;color:#fff;border:none;border-radius:4px;padding:0.3rem 0.7rem;cursor:pointer;">Remove</button>
+        </li>`
+      ).join('') +
+      '</ul>';
+    document.getElementById('create-recipe-btn').disabled = false;
+
+    // Add event listeners for remove buttons
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.onclick = async function () {
+        const id = this.getAttribute('data-id');
+        await fetch('pantry_items.php', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        fetchPantryItems();
+        // Notify recipes page to update
+        if (window.localStorage) {
+          localStorage.setItem('pantry-updated', Date.now());
+        }
+      };
+    });
+
+    // Notify recipes page to update (for add)
+    if (window.localStorage) {
+      localStorage.setItem('pantry-updated', Date.now());
+    }
+  }
+
+  document.getElementById('pantry-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const itemName = document.getElementById('item-name').value.trim();
+    const mfgDate = document.getElementById('mfg-date').value;
+    const expDate = document.getElementById('exp-date').value;
+    if (!itemName || !mfgDate || !expDate) return;
+    await fetch('pantry_items.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        item_name: itemName,
+        manufacture_date: mfgDate,
+        expiration_date: expDate
+      })
+    });
+    document.getElementById('item-name').value = '';
+    document.getElementById('mfg-date').value = '';
+    document.getElementById('exp-date').value = '';
+    fetchPantryItems();
+    // Notify recipes page to update
+    if (window.localStorage) {
+      localStorage.setItem('pantry-updated', Date.now());
+    }
+  });
+
+  fetchPantryItems();
+</script>

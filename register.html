@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register into Smart Pantry</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
+
 <body>
     <div class="login-logo">
         <a href="index.html" class="logo"><i class="fas fa-leaf"></i> SmartPantry</a>
     </div>
     <div class="register-container">
         <h2>Create Your Account</h2>
-        <form action="/register" method="POST">
+        <form id="registerForm">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
@@ -47,5 +49,31 @@
             <span>&copy; 2025 Smart Pantry Manager. All rights reserved.</span>
         </div>
     </footer>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const data = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                phone: document.getElementById('phone').value
+            };
+            const response = await fetch('/Smart-Pantry_manager/register.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Registration successful!');
+                // Optionally redirect:
+                // window.location.href = '/Smart-Pantry_manager/login.html';
+            } else {
+                alert(result.message);
+            }
+        });
+    </script>
+
 </body>
+
 </html>
