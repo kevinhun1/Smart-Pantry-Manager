@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Recipes - Smart Pantry Manager</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="login-logo">
+    <a href="index.html" class="logo"><i class="fas fa-leaf"></i> SmartPantry</a>
+  </div>
+  <div class="recipes-container">
+    <h2>Your Pantry Items</h2>
+    <ul class="pantry-items-list" id="pantryItemsList">
+      <!-- Items will be loaded here dynamically -->
+    </ul>
+
+    <h2>Recipes You Can Make</h2>
+    <div class="recipes-list">
+      <div class="recipe-card">
+        <h3>Cheese Omelette</h3>
+        <ul>
+          <li>Eggs</li>
+          <li>Cheese</li>
+          <li>Milk</li>
+        </ul>
+        <p><strong>Instructions:</strong> Beat eggs with milk, add cheese, cook in a pan until set.</p>
+      </div>
+      <div class="recipe-card">
+        <h3>Tomato Sandwich</h3>
+        <ul>
+          <li>Bread</li>
+          <li>Tomatoes</li>
+          <li>Cheese</li>
+        </ul>
+        <p><strong>Instructions:</strong> Layer sliced tomatoes and cheese between bread slices. Toast if desired.</p>
+      </div>
+      <div class="recipe-card">
+        <h3>French Toast</h3>
+        <ul>
+          <li>Bread</li>
+          <li>Eggs</li>
+          <li>Milk</li>
+        </ul>
+        <p><strong>Instructions:</strong> Dip bread in beaten eggs and milk, then fry until golden brown.</p>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="container">
+      <span>&copy; 2025 Smart Pantry Manager. All rights reserved.</span>
+    </div>
+  </footer>
+  <script>
+    function getTimeRemaining(expirationDate) {
+      const now = new Date();
+      const exp = new Date(expirationDate);
+      const total = exp - now;
+      if (total <= 0) return { days: 0, hours: 0, mins: 0, secs: 0, expired: true };
+      const days = Math.floor(total / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((total / (1000 * 60)) % 60);
+      const secs = Math.floor((total / 1000) % 60);
+      return { days, hours, mins, secs, expired: false };
+    }
+
+    async function fetchPantryItems() {
+      const res = await fetch('pantry_items.php');
+      const items = await res.json();
+      const list = document.getElementById('pantryItemsList');
+      list.innerHTML = '';
+      if (!items.length) {
+        list.innerHTML = '<li style="color:#888;">Your added pantry items will appear here.</li>';
+        return;
+      }
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="item-name">${item.item_name}</span>
+        <span class="exp-timer" data-exp="${item.expiration_date}"></span>`;
+        list.appendChild(li);
+      });
+      updateTimers();
+    }
+
+    function updateTimers() {
+      document.querySelectorAll('.exp-timer').forEach(span => {
+        const expDate = span.getAttribute('data-exp');
+        if (!expDate) {
+          span.textContent = '';
+          return;
+        }
+        const { days, hours, mins, secs, expired } = getTimeRemaining(expDate);
+        span.textContent = expired
+          ? ' (Expired)'
+          : ` (Expires in ${days}d ${hours}h ${mins}m ${secs}s)`;
+      });
+      setTimeout(updateTimers, 1000);
+    }
+
+    fetchPantryItems();
+
+    // Listen for pantry updates from other tabs/pages
+    if (window.localStorage) {
+      window.addEventListener('storage', function (e) {
+        if (e.key === 'pantry-updated') {
+          fetchPantryItems();
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
